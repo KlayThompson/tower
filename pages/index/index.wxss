@@ -1,4 +1,11 @@
 /**index.wxss**/
+@import "/pages/template/indexPopup.wxss";
+
+.index_block_view {
+  height:100%;
+  width:100%;
+  background-color:#f0f0f0;
+}
 .userinfo {
   display: flex;
   flex-direction: column;
@@ -16,6 +23,49 @@
   color: #aaa;
 }
 
-.usermotto {
-  margin-top: 200px;
+.view_header {
+  width: 100%;
+  height: 100rpx;
+  display: inline-flex;
+  margin-bottom: 11px;
+}
+
+.header_title {
+  color: #E99746;
+  font-size:80rpx;
+  padding-left: 30rpx;
+}
+
+.header_subTitle {
+  width: 70%;
+  color: #E99746;
+  font-size: 50rpx;
+  padding-right: 30rpx;
+  text-align: right;
+  padding-top: 30rpx;
+}
+
+.reminder_list_view {
+  width: 100%;
+  height: 89%;
+}
+
+.reminder_cell {
+  /* background-color: cadetblue; */
+  height: 50px;
+  border-bottom:2rpx solid #dcdcdc;
+  margin-left: 30rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.reminder_title {
+  font-size:32rpx;
+  color: #4c4c4c;
+}
+
+.reminder_happenTime {
+  font-size: 28rpx;
+  color: #888888;
 }

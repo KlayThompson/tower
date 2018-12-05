@@ -1,0 +1,3 @@
+<!--pages/reminderDetail/reminderDetail.wxml-->
+<text>pages/reminderDetail/reminderDetail.wxml</text>
+<text>{{reminderId}}</text>

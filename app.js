@@ -1,4 +1,5 @@
 //app.js
+
 App({
   onLaunch: function () {
     // 展示本地存储能力
@@ -10,6 +11,26 @@ App({
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        console.log(res)
+        var infoStr = '{errMsg:' + res.errMsg + ',code:' + res.code + '}';
+        var loginSession = wx.getStorageSync('loginSession')
+        if (!loginSession) {
+          // wx.request({
+          //   url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/wxLogin',
+          //   data: {
+          //     code: res.code,
+          //     info: infoStr
+          //   },
+          //   header: {
+          //     "Content-Type": "application/json"
+          //   },
+          //   method: 'POST',
+          //   success: function (e) {
+          //     console.log(e)
+          //     wx.setStorageSync('loginSession', e.data.loginSession)
+          //   }
+          // })
+        }
       }
     })
     // 获取用户信息
@@ -27,6 +48,23 @@ App({
               if (this.userInfoReadyCallback) {
                 this.userInfoReadyCallback(res)
               }
+              var loginSession = wx.getStorageSync('loginSession')
+              if (loginSession) {
+              //   wx.request({
+              //     url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/user',
+              //     method: 'PUT',
+              //     data: {
+              //       nickName: res.userInfo.nickName,
+              //       avatarUrl: res.userInfo.avatarUrl,
+              //     },
+              //     header: {
+              //       'loginSession': loginSession
+              //     },
+              //     success: function(e) {
+              //       console.log(e)
+              //    }
+              // })
+              }
             }
           })
         }
@@ -34,6 +72,8 @@ App({
     })
   },
   globalData: {
-    userInfo: null
+    userInfo: null,
+    BaseUrl: 'https://dwxapi.anyocharging.com:11443',
+    API: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/',
   }
 })

@@ -1,13 +1,25 @@
 <!--index.wxml-->
-<view class="container">
+<view class="index_block_view">
+ <view class='view_header' wx:if="{{hasUserInfo}}">
+    <text class='header_title'>提醒</text>
+    <text class='header_subTitle'>{{notifyCount}}</text>
+  </view>
   <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 点击登录 </button>
     <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+      <!-- <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text> -->
     </block>
+    
   </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
+  <view class='reminder_list_view'>
+    <view class='reminder_cell' wx:for="{{reminderSummary}}">
+      <view class="station-device-info" bindtap='gotoDetail' data-reminderId="{{item.reminderId}}">
+        <view class="reminder_title">{{item.title}}</view>
+        <view class="reminder_happenTime">{{item.happenTime}}</view>
+      </view>
+    </view>
   </view>
+ <view class='add_symbol' bindtap='showAddNotify'></view>
+
 </view>

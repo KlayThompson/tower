@@ -1,0 +1,46 @@
+/* pages/add/addMeeting.wxss */
+.add_container {
+  height:100%;
+  width:100%;
+  background-color:#f0f0f0;
+  padding: 80rpx 0;
+}
+
+.notify_title_container {
+  width: 100%;
+  height: 50px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.title_input {
+  position: absolute;
+  left: 30rpx;
+  width: 80%;
+  color: #4c4c4c;
+  font-size: 15px;
+}
+
+.notify_switch_container {
+  width: 100%;
+  height: 50px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.subTitle {
+  position: absolute;
+  left: 30rpx;
+  color: #4c4c4c
+}
+
+.notify_switch {
+  position: absolute;
+  right: 20rpx;
+  font-size: 15rpx;
+}
