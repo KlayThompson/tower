@@ -31,16 +31,76 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-bottom: 20px; 
 }
 
 .subTitle {
   position: absolute;
   left: 30rpx;
-  color: #4c4c4c
+  color: #4c4c4c;
+  /* background-color: red; */
 }
 
 .notify_switch {
   position: absolute;
   right: 20rpx;
   font-size: 15rpx;
+}
+
+.meeting_date_container {
+  width: 100%;
+  height: 50px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+}
+
+.select_time {
+  position: absolute;
+  left: 220rpx; 
+  color: #4c4c4c;
+}
+.list-arrow-icon {
+  position: absolute;
+  right: 20rpx;
+  height:46rpx;
+  width:46rpx;
+}
+
+.meeting_time_container {
+  width: 100%;
+  height: 50px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top: 2rpx dashed #edeff1; 
+}
+
+.before_time_container {
+  width: 100%;
+  height: 50px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top: 2rpx dashed #edeff1; 
+  margin-bottom: 20px;
+}
+
+.picker_before {
+  position: absolute;
+  left: 340rpx; 
+  color: #4c4c4c;
+}
+
+.submit_button {
+  width: 618rpx;
+  margin: 0 auto;
+  position: relative;
+  top:50rpx;
+  background-color: rgb(23, 194, 66);
+  /* background-color:#E99746; */
+  color: #fff;
 }

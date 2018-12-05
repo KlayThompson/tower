@@ -2,19 +2,39 @@
 <form name='pushMsgFm' report-submit bindsubmit='orderSign' >  
   <view class='add_container'>
     <view class='notify_title_container'>
-      <input placeholder='请输入会议标题' class='title_input'></input>
+      <input placeholder='请输入会议标题' class='title_input'  bindinput='inputTitle'></input>
     </view>
     <view class='notify_switch_container'>
       <text class='subTitle'>在指定时间提醒我</text>
-      <switch checked='true' class='notify_switch'></switch>
+      <switch checked='true' class='notify_switch' bindchange='timeSwitchChange'></switch>
     </view>
-    <view> 单号: 0</view>
-    <view> 商家名称: 腾讯早餐店</view>
-    <view>实付金额:66元</view>
-    <view>物品名称：包子</view>
-    <view>付款金额：68元</view>
-    <view>付款时间： 2018年1月1日 </view>
-    <button form-type="submit">发送模板消息</button>  
+    <view class='meeting_date_container'>
+       <text class='subTitle'>提醒日期</text>
+       <picker mode="date" class='select_time' wx:if="{{meetingDate == ''}}" bindchange='selectDate'>请选择提醒日期</picker>
+       <picker mode="date" bindchange='selectDate' class='select_time' wx:else>{{meetingDate}}</picker>
+       <image src="{{arrow_icon_url}}" mode="scaleToFill" binderror="" bindload="" class="list-arrow-icon"></image>
+    </view>
+    <view class='meeting_time_container' wx:if="{{meetingDate != ''}}">
+      <!-- <view class='time_line'></view> -->
+       <text class='subTitle'>提醒时间</text>
+       <picker mode="time" class='select_time' bindchange='selectTime' wx:if="{{meetingTime == ''}}">请选择提醒时间</picker>
+       <picker mode="time" class='select_time' bindchange='selectTime' wx:else>{{meetingTime}}</picker>
+       <image src="{{arrow_icon_url}}" mode="scaleToFill" binderror="" bindload="" class="list-arrow-icon"></image>
+    </view>
+    <view class='before_time_container'>
+      <text class='subTitle'>提前多久提醒我</text>
+      <picker bindchange="bindBeforeChange" range="{{array}}" class='picker_before'>{{beforeTime}}</picker>
+      <image src="{{arrow_icon_url}}" mode="scaleToFill" binderror="" bindload="" class="list-arrow-icon"></image>
+    </view>
+
+    <view class='notify_switch_container'>
+      <text class='subTitle'>在指定地点提醒我</text>
+      <switch class='notify_switch' bindchange='locationSwitchChange'></switch>
+    </view>
+    <view class='notify_switch_container'>
+      <input placeholder='请输入备注' class='title_input' bindinput='inputDesc'></input>
+    </view>
+    <button form-type="submit" class='submit_button'>保存</button>  
   </view>
   
 </form>

@@ -69,3 +69,10 @@
   font-size: 28rpx;
   color: #888888;
 }
+
+.list-arrow-icon {
+  position: absolute;
+  right: 20rpx;
+  height:46rpx;
+  width:46rpx;
+}

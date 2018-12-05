@@ -15,21 +15,21 @@ App({
         var infoStr = '{errMsg:' + res.errMsg + ',code:' + res.code + '}';
         var loginSession = wx.getStorageSync('loginSession')
         if (!loginSession) {
-          // wx.request({
-          //   url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/wxLogin',
-          //   data: {
-          //     code: res.code,
-          //     info: infoStr
-          //   },
-          //   header: {
-          //     "Content-Type": "application/json"
-          //   },
-          //   method: 'POST',
-          //   success: function (e) {
-          //     console.log(e)
-          //     wx.setStorageSync('loginSession', e.data.loginSession)
-          //   }
-          // })
+          wx.request({
+            url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/wxLogin',
+            data: {
+              code: res.code,
+              info: infoStr
+            },
+            header: {
+              "Content-Type": "application/json"
+            },
+            method: 'POST',
+            success: function (e) {
+              console.log(e)
+              wx.setStorageSync('loginSession', e.data.loginSession)
+            }
+          })
         }
       }
     })
@@ -50,20 +50,26 @@ App({
               }
               var loginSession = wx.getStorageSync('loginSession')
               if (loginSession) {
-              //   wx.request({
-              //     url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/user',
-              //     method: 'PUT',
-              //     data: {
-              //       nickName: res.userInfo.nickName,
-              //       avatarUrl: res.userInfo.avatarUrl,
-              //     },
-              //     header: {
-              //       'loginSession': loginSession
-              //     },
-              //     success: function(e) {
-              //       console.log(e)
-              //    }
-              // })
+                var avatar = res.userInfo.avatarUrl + ''
+                var nickName = res.userInfo.nickName + ''
+                
+                wx.request({
+                  url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/user',
+                  method: 'PUT',
+                  data: {
+                    nickName: nickName,
+                    avatarUrl: avatar,
+                    phoneNumber: '',
+                    purePhoneNumber: '',
+                    countryCode: ''
+                  },
+                  header: {
+                    'loginSession': loginSession
+                  },
+                  success: function(e) {
+                    console.log(e)
+                 }
+              })
               }
             }
           })

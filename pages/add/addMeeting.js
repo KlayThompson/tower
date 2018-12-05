@@ -1,11 +1,24 @@
 // pages/add/addMeeting.js
+//获取应用实例
+const app = getApp()
+
+var userLat, userLng;
+var timeSwitchState = true
+var locationSwitchState = false
+var desc = ''
+var rTitle = ''
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    arrow_icon_url: '/resources/arrow-right.png',
+    meetingDate: '',//会议日期
+    meetingTime: '',//会议时间
+    beforeTime: '立刻',
+    array: ['立刻', '5分钟', '10分钟', '30分钟', '1小时', '2小时'],
   },
 
   /**
@@ -65,5 +78,80 @@ Page({
   },
   orderSign: function (e) {
     console.log(e)
+    var loginSession = wx.getStorageSync('loginSession')
+    var time = this.data.meetingDate + ' ' + this.data.meetingTime + ':00'
+    wx.request({
+      url: app.globalData.BaseUrl + '/v1/wxapi/reminder',
+      method: 'POST',
+      header: {
+        loginSession: loginSession
+      },
+      data: {
+        title: rTitle,
+        location: userLat + ',' + userLng,
+        needPush: timeSwitchState,
+        needSms: false,
+        ownerFormId: e.detail.formId,
+        happenTime: time,
+        ReminderTime1: time,
+        detail: desc
+      },
+      success: function(res) {
+        console.log(res)
+      }
+    })
+  },
+  //输入标题
+  inputTitle: function(e) {
+    rTitle = e.detail.value
+    console.log(rTitle)
+  },
+  //选择日期
+  selectDate: function (e) {
+    console.log(e)
+    this.setData({
+      meetingDate: e.detail.value
+    })
+  },
+//选择具体时间
+  selectTime: function (e) {
+    console.log(e)
+    this.setData({
+      meetingTime: e.detail.value
+    })
+  },
+//提前多久时间选择
+  bindBeforeChange: function(e) {
+    console.log(e)
+    var time = this.data.array[e.detail.value]
+    this.setData({
+      beforeTime: time
+    })
+  },
+
+  // 时间开关事件
+  timeSwitchChange: function(res) {
+    timeSwitchState = res.detail.value
+    console.log(timeSwitchState)
+  },
+  // 位置开关事件
+  locationSwitchChange: function (res) {
+    locationSwitchState = res.detail.value
+    console.log(locationSwitchState)
+    if (locationSwitchState) {
+      wx.getLocation({
+        type: 'wgs84',
+        success(res) {
+          userLat = res.latitude
+          userLng = res.longitude
+          console.log(userLat,userLng)
+        }
+      })
+    }
+  },
+  //描述输入
+  inputDesc: function (e) {
+    desc = e.detail.value
+    console.log(desc)
   }
 })

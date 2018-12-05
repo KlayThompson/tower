@@ -9,7 +9,8 @@ Page({
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     notifyCount: 2,
-    reminderSummary: [{reminderId: "1234", happenTime: "2018-09-18", title: "G20会议" }, { reminderId: "1235", happenTime: "2018-09-18", title: "G20会议" }, { reminderId: "1236", happenTime: "2018-09-18", title: "G20会议" }]
+    reminderSummary: [{reminderId: "1234", happenTime: "2018-09-18", title: "G20会议" }, { reminderId: "1235", happenTime: "2018-09-18", title: "G20会议" }, { reminderId: "1236", happenTime: "2018-09-18", title: "G20会议" }],
+    arrow_icon_url: '/resources/arrow-right.png'
   },
   //事件处理函数
   bindViewTap: function() {
@@ -43,6 +44,28 @@ Page({
     })
   },
   onLoad: function () {
+    var that = this
+    var loginSession = wx.getStorageSync('loginSession')
+    if (loginSession) {
+      wx.request({
+        url: app.globalData.API + '/reminder/summary',
+        header: {
+          'loginSession': loginSession
+        },
+        method: 'GET',
+        success: function(e) {
+          that.setData ({
+            reminderSummary: e.data
+          })
+        }
+      })
+    }
+
+
+
+
+
+
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,

@@ -13,9 +13,6 @@ Page({
    */
   onLoad: function (options) {
     reminderId = options.reminderId
-    this.setData ({
-      reminderId: reminderId
-    })
   },
 
   /**
