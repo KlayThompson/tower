@@ -1,3 +1,41 @@
 <!--pages/reminderDetail/reminderDetail.wxml-->
-<text>pages/reminderDetail/reminderDetail.wxml</text>
-<text>{{reminderId}}</text>
+
+<form name='pushMsgFm' report-submit bindsubmit='orderSign' >  
+  <view class='add_container'>
+    <view class='notify_title_container'>
+      <input placeholder='请输入会议标题' class='title_input'  bindinput='inputTitle' value="{{title}}" disabled="{{!owner}}"></input>
+    </view>
+    <view class='notify_switch_container'>
+      <text class='subTitle'>在指定时间提醒我</text>
+      <switch checked='true' class='notify_switch' bindchange='timeSwitchChange' disabled="{{!owner}}"></switch>
+    </view>
+    <view class='meeting_date_container'>
+       <text class='subTitle'>提醒日期</text>
+       <picker mode="date" class='select_time' wx:if="{{happenTime == ''}}" bindchange='selectDate' disabled="{{!owner}}">请选择提醒日期</picker>
+       <picker mode="date" disabled="{{!owner}}" bindchange='selectDate' class='select_time' wx:else>{{happenTime}}</picker>
+       <image src="{{arrow_icon_url}}" mode="scaleToFill" binderror="" bindload="" class="list-arrow-icon"></image>
+    </view>
+    <view class='meeting_time_container' wx:if="{{happenTime != ''}}">
+      <!-- <view class='time_line'></view> -->
+       <text class='subTitle'>提醒时间</text>
+       <picker mode="time" class='select_time' bindchange='selectTime' wx:if="{{meetingTime == ''}}">请选择提醒时间</picker>
+       <picker mode="time" class='select_time' bindchange='selectTime' wx:else>{{meetingTime}}</picker>
+       <image src="{{arrow_icon_url}}" mode="scaleToFill" binderror="" bindload="" class="list-arrow-icon"></image>
+    </view>
+    <view class='before_time_container'>
+      <text class='subTitle'>提前多久提醒我</text>
+      <picker bindchange="bindBeforeChange" range="{{array}}" class='picker_before' disabled="{{!owner}}">{{beforeTime}}</picker>
+      <image src="{{arrow_icon_url}}" mode="scaleToFill" binderror="" bindload="" class="list-arrow-icon"></image>
+    </view>
+
+    <view class='notify_switch_container'>
+      <text class='subTitle'>在指定地点提醒我</text>
+      <switch class='notify_switch' bindchange='locationSwitchChange' disabled="{{!owner}}"></switch>
+    </view>
+    <view class='notify_switch_container'>
+      <input placeholder='请输入备注' class='title_input' bindinput='inputDesc' value="{{detail}}" disabled="{{!owner}}"></input>
+    </view>
+    <button form-type="submit" class='submit_button' disabled="{{!owner}}">保存</button>  
+  </view>
+  
+</form>

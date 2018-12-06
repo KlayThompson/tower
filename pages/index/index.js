@@ -12,59 +12,12 @@ Page({
     reminderSummary: [{reminderId: "1234", happenTime: "2018-09-18", title: "G20会议" }, { reminderId: "1235", happenTime: "2018-09-18", title: "G20会议" }, { reminderId: "1236", happenTime: "2018-09-18", title: "G20会议" }],
     arrow_icon_url: '/resources/arrow-right.png'
   },
-  //事件处理函数
-  bindViewTap: function() {
-    // wx.navigateTo({
-    //   url: '../logs/logs'
-    // })
-    // wx.checkSession({
-    //   success(res) {
-    //     //session_key 未过期，并且在本生命周期一直有效
-    //     console.log(res)
-    //   },
-    //   fail() {
-    //     // session_key 已经失效，需要重新执行登录流程
-    //     wx.login() //重新登录
-    //   }
-    // })
-    wx.login({
-      success(res) {
-        if (res.code) {
-          //发起网络请求
-          wx.request({
-            url: 'https://test.com/onLogin',
-            data: {
-              code: res.code
-            }
-          })
-        } else {
-          console.log('登录失败！' + res.errMsg)
-        }
-      }
-    })
+
+  onShow: function () {
+    this.loadReminderList()
   },
   onLoad: function () {
-    var that = this
-    var loginSession = wx.getStorageSync('loginSession')
-    if (loginSession) {
-      wx.request({
-        url: app.globalData.API + '/reminder/summary',
-        header: {
-          'loginSession': loginSession
-        },
-        method: 'GET',
-        success: function(e) {
-          that.setData ({
-            reminderSummary: e.data
-          })
-        }
-      })
-    }
-
-
-
-
-
+    this.loadReminderList()
 
     if (app.globalData.userInfo) {
       this.setData({
@@ -100,30 +53,61 @@ Page({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
     })
+  var that = this
+    //更新用户信息
+    var loginSession = wx.getStorageSync('loginSession')
+    if (loginSession) {
+      var avatar = e.detail.userInfo.avatarUrl + ''
+      var nickName = e.detail.userInfo.nickName + ''
+
+      wx.request({
+        url: app.globalData.API + '/user',
+        method: 'PUT',
+        data: {
+          nickName: nickName,
+          avatarUrl: avatar,
+          phoneNumber: '',
+          purePhoneNumber: '',
+          countryCode: ''
+        },
+        header: {
+          'loginSession': loginSession
+        },
+        success: function (e) {
+          that.loadReminderList()
+        }
+      })
+    }
   },
   showAddNotify: function() {
     wx.navigateTo({
       url: '../add/addMeeting'
     })
-    var loginSession = wx.getStorageSync('loginSession')
-
-    // wx.request({
-    //   url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/reminder/summary',
-    //   method: 'GET',
-    //   header: {
-    //     "Content-Type": "application/json",
-    //     'loginSession': loginSession
-    //   },
-    //   success: function(e) {
-    //     console.log(e)
-    //   }
-    // })
   },
   gotoDetail: function(item) {
-    var reminderId = item.currentTarget.dataset.reminderid
+    var reminderId = item.currentTarget.dataset.reminderitem.reminderid
     console.log(item.currentTarget.dataset.reminderid)
     wx.navigateTo({
       url: '../reminderDetail/reminderDetail' + '?reminderId=' + reminderId
     })
+  },
+
+  loadReminderList: function() {
+    var that = this
+    var loginSession = wx.getStorageSync('loginSession')
+    if (loginSession) {
+      wx.request({
+        url: app.globalData.API + '/reminder/summary',
+        header: {
+          'loginSession': loginSession
+        },
+        method: 'GET',
+        success: function (e) {
+          that.setData({
+            reminderSummary: e.data
+          })
+        }
+      })
+    }
   }
 })

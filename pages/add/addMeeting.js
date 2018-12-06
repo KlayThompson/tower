@@ -78,6 +78,7 @@ Page({
   },
   orderSign: function (e) {
     console.log(e)
+    var that = this
     var loginSession = wx.getStorageSync('loginSession')
     var time = this.data.meetingDate + ' ' + this.data.meetingTime + ':00'
     wx.request({
@@ -93,11 +94,12 @@ Page({
         needSms: false,
         ownerFormId: e.detail.formId,
         happenTime: time,
-        ReminderTime1: time,
+        reminderTime1: time,
         detail: desc
       },
       success: function(res) {
         console.log(res)
+        that.goToHomePage()
       }
     })
   },
@@ -153,5 +155,20 @@ Page({
   inputDesc: function (e) {
     desc = e.detail.value
     console.log(desc)
+  },
+
+  goToHomePage: function () {
+
+    wx.showModal({
+      title: '提示',
+      content: '保存成功！',
+      confirmText: '确定',
+      showCancel: false,
+      success: function () {
+        wx.navigateBack({
+
+        })
+      }
+    })
   }
 })

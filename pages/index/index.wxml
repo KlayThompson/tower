@@ -14,7 +14,7 @@
   </view>
   <view class='reminder_list_view'>
     <view class='reminder_cell' wx:for="{{reminderSummary}}" wx:key="index">
-      <view class="station-device-info" bindtap='gotoDetail' data-reminderId="{{item.reminderId}}">
+      <view class="station-device-info" bindtap='gotoDetail' data-reminderItem="{{item}}">
         <view class="reminder_title">{{item.title}}</view>
         <view class="reminder_happenTime">{{item.happenTime}}</view>
       </view>

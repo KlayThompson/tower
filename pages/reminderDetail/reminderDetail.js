@@ -1,18 +1,57 @@
 // pages/reminderDetail/reminderDetail.js
+//获取应用实例
+const app = getApp()
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    reminderId: ""
+    owner: false,
+    title: '',
+    detail: '',
+    happenTime: '',
+    id: '',
+    location: '',
+    needPush: false,
+    needSms: false,
+    reminderTime1: '',
+    reminderTime2: '',
+    beforeTime: '立刻',
+    array: ['立刻', '5分钟', '10分钟', '30分钟', '1小时', '2小时']
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    reminderId = options.reminderId
+    var reminderId = options.reminderId
+    console.log(reminderId)
+    var loginSession = wx.getStorageSync('loginSession')
+    var that = this
+    wx.request({
+      url: app.globalData.API + '/reminder/' + reminderId,
+      method: 'GET',
+      header: {
+        loginSession: loginSession
+      },
+      success: function(e) {
+        console.log(e)
+        that.setData({
+          title: e.data.title,
+          detail: e.data.detail,
+          happenTime: e.data.happenTime,
+          id: e.data.id,
+          location: e.data.location,
+          needPush: e.data.needPush,
+          needSms: e.data.needSms,
+          reminderTime1: e.data.reminderTime1,
+          reminderTime2: e.data.reminderTime2,
+          owner: e.data.owner
+        })
+      }
+    })
   },
 
   /**
