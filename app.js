@@ -12,6 +12,7 @@ App({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
         console.log(res)
+        wx.setStorageSync('codeInfo', res)
         var infoStr = '{errMsg:' + res.errMsg + ',code:' + res.code + '}';
         var loginSession = wx.getStorageSync('loginSession')
         if (!loginSession) {
@@ -52,7 +53,7 @@ App({
               if (loginSession) {
                 var avatar = res.userInfo.avatarUrl + ''
                 var nickName = res.userInfo.nickName + ''
-                
+
                 wx.request({
                   url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/user',
                   method: 'PUT',

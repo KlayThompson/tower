@@ -103,11 +103,34 @@ Page({
         },
         method: 'GET',
         success: function (e) {
-          that.setData({
-            reminderSummary: e.data
-          })
+          if (e.statusCode == 401) {
+            that.userLogin()
+          } else {
+            that.setData({
+              reminderSummary: e.data
+            })
+          }
         }
       })
     }
-  }
+  },
+  userLogin: function (){
+    var codeInfo = wx.getStorageSync('codeInfo')
+    var infoStr = '{errMsg:' + codeInfo.errMsg + ',code:' + codeInfo.code + '}';
+      wx.request({
+        url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/wxLogin',
+        data: {
+          code: codeInfo.code,
+          info: infoStr
+        },
+        header: {
+          "Content-Type": "application/json"
+        },
+        method: 'POST',
+        success: function (e) {
+          console.log(e)
+          wx.setStorageSync('loginSession', e.data.loginSession)
+        }
+      })
+    }
 })
