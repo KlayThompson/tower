@@ -86,7 +86,6 @@ Page({
   },
   gotoDetail: function(item) {
     var reminderId = item.currentTarget.dataset.reminderitem.reminderid
-    console.log(item.currentTarget.dataset.reminderid)
     wx.navigateTo({
       url: '../reminderDetail/reminderDetail' + '?reminderId=' + reminderId
     })
@@ -117,6 +116,7 @@ Page({
   userLogin: function (){
     var codeInfo = wx.getStorageSync('codeInfo')
     var infoStr = '{errMsg:' + codeInfo.errMsg + ',code:' + codeInfo.code + '}';
+    var that = this
       wx.request({
         url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/wxLogin',
         data: {
@@ -130,6 +130,8 @@ Page({
         success: function (e) {
           console.log(e)
           wx.setStorageSync('loginSession', e.data.loginSession)
+          //重新调取提醒列表
+          that.loadReminderList()
         }
       })
     }

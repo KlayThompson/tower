@@ -97,7 +97,7 @@
 }
 
 .submit_button {
-  width: 618rpx;
+  width: 650rpx;
   margin: 0 auto;
   position: relative;
   top:50rpx;

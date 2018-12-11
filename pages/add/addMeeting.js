@@ -7,6 +7,7 @@ var timeSwitchState = true
 var locationSwitchState = false
 var desc = ''
 var rTitle = ''
+var location = ''
 
 Page({
 
@@ -19,6 +20,7 @@ Page({
     meetingTime: '',//会议时间
     beforeTime: '立刻',
     array: ['立刻', '5分钟', '10分钟', '30分钟', '1小时', '2小时'],
+    timeStatus: true
   },
 
   /**
@@ -89,7 +91,7 @@ Page({
       },
       data: {
         title: rTitle,
-        location: userLat + ',' + userLng,
+        location: location,
         needPush: timeSwitchState,
         needSms: false,
         ownerFormId: e.detail.formId,
@@ -135,6 +137,9 @@ Page({
   timeSwitchChange: function(res) {
     timeSwitchState = res.detail.value
     console.log(timeSwitchState)
+    this.setData({
+      timeStatus: res.detail.value
+    })
   },
   // 位置开关事件
   locationSwitchChange: function (res) {
@@ -155,6 +160,11 @@ Page({
   inputDesc: function (e) {
     desc = e.detail.value
     console.log(desc)
+  },
+  //日程地点输入
+  inputLocation: function (e) {
+    location = e.detail.value
+    console.log(location)
   },
 
   goToHomePage: function () {

@@ -31,7 +31,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
 }
 
 .subTitle {
@@ -96,7 +96,7 @@
 }
 
 .submit_button {
-  width: 618rpx;
+  width: 650rpx;
   margin: 0 auto;
   position: relative;
   top:50rpx;
