@@ -9,7 +9,7 @@ Page({
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     notifyCount: 2,
-    reminderSummary: [{reminderId: "1234", happenTime: "2018-09-18", title: "G20会议" }, { reminderId: "1235", happenTime: "2018-09-18", title: "G20会议" }, { reminderId: "1236", happenTime: "2018-09-18", title: "G20会议" }],
+    reminderSummary: [],
     arrow_icon_url: '/resources/arrow-right.png'
   },
 
@@ -106,11 +106,14 @@ Page({
             that.userLogin()
           } else {
             that.setData({
-              reminderSummary: e.data
+              reminderSummary: e.data,
+              notifyCount: e.data.length
             })
           }
         }
       })
+    } else {
+     
     }
   },
   userLogin: function (){
@@ -118,7 +121,7 @@ Page({
     var infoStr = '{errMsg:' + codeInfo.errMsg + ',code:' + codeInfo.code + '}';
     var that = this
       wx.request({
-        url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/wxLogin',
+        url: app.globalData.API + '/wxLogin',
         data: {
           code: codeInfo.code,
           info: infoStr

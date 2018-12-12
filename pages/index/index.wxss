@@ -1,6 +1,19 @@
 /**index.wxss**/
 @import "/pages/template/indexPopup.wxss";
 
+.loginButton {
+  width: 650rpx;
+  margin: 0 auto;
+  position: relative;
+  top:250rpx;
+  background-color: rgb(23, 194, 66);
+  color: #fff;
+}
+.tip_text {
+  color: #4c4c4c;
+  font-size: 14px;
+  margin-top: 300rpx;
+}
 .index_block_view {
   height:100%;
   width:100%;
@@ -25,9 +38,10 @@
 
 .view_header {
   width: 100%;
-  height: 100rpx;
+  height: 60px;
   display: inline-flex;
   margin-bottom: 11px;
+  border-bottom:2rpx solid #dcdcdc;
 }
 
 .header_title {
@@ -47,12 +61,11 @@
 
 .reminder_list_view {
   width: 100%;
-  height: 89%;
 }
 
 .reminder_cell {
   /* background-color: cadetblue; */
-  height: 50px;
+  height: 53px;
   border-bottom:2rpx solid #dcdcdc;
   margin-left: 30rpx;
   display: flex;
@@ -61,12 +74,12 @@
 }
 
 .reminder_title {
-  font-size:32rpx;
+  font-size:34rpx;
   color: #4c4c4c;
 }
 
 .reminder_happenTime {
-  font-size: 28rpx;
+  font-size: 30rpx;
   color: #888888;
 }
 

@@ -8,6 +8,8 @@ var locationSwitchState = false
 var desc = ''
 var rTitle = ''
 var location = ''
+var util = require('../../utils/util.js');
+
 
 Page({
 
@@ -83,6 +85,15 @@ Page({
     var that = this
     var loginSession = wx.getStorageSync('loginSession')
     var time = this.data.meetingDate + ' ' + this.data.meetingTime + ':00'
+    var date = new Date(time.replace(/-/g, "/")).getTime()
+    if(that.data.beforeTime != "立刻") {
+      var timeInt = parseInt(that.data.beforeTime)
+      if (timeInt == 1 || timeInt == 2) {
+        timeInt = timeInt * 60
+      }
+      date = date + timeInt*60*1000
+    }
+    var reminderTime1 = that.changeToDate(date)
     wx.request({
       url: app.globalData.BaseUrl + '/v1/wxapi/reminder',
       method: 'POST',
@@ -96,7 +107,7 @@ Page({
         needSms: false,
         ownerFormId: e.detail.formId,
         happenTime: time,
-        reminderTime1: time,
+        reminderTime1: reminderTime1,
         detail: desc
       },
       success: function(res) {
@@ -180,5 +191,25 @@ Page({
         })
       }
     })
+  },
+  
+  /*
+   * 时间戳转换为yyyy-MM-dd hh:mm:ss 格式  formatDate()
+   * inputTime   时间戳
+   */
+  changeToDate: function (inputTime) {
+    var date = new Date(inputTime);
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    m = m < 10 ? ('0' + m) : m;
+    var d = date.getDate();
+    d = d < 10 ? ('0' + d) : d;
+    var h = date.getHours();
+    h = h < 10 ? ('0' + h) : h;
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    minute = minute < 10 ? ('0' + minute) : minute;
+    second = second < 10 ? ('0' + second) : second;
+    return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
   }
 })

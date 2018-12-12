@@ -1,8 +1,6 @@
 /* pages/reminderDetail/reminderDetail.wxss */
 /* pages/add/addMeeting.wxss */
 .add_container {
-  height:100%;
-  width:100%;
   background-color:#f0f0f0;
   padding: 80rpx 0;
 }
@@ -102,6 +100,17 @@
   position: relative;
   top:50rpx;
   background-color: rgb(23, 194, 66);
+  /* background-color:#E99746; */
+  color: #fff;
+  margin-bottom: 20rpx;
+}
+
+.delete_button {
+  width: 650rpx;
+  margin: 0 auto;
+  position: relative;
+  top:50rpx;
+  background-color: rgb(250, 108, 83);
   /* background-color:#E99746; */
   color: #fff;
 }

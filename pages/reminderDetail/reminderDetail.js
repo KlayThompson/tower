@@ -28,12 +28,13 @@ Page({
     reminderTime2: '',
     beforeTime: '立刻',
     array: ['立刻', '5分钟', '10分钟', '30分钟', '1小时', '2小时'],
+    joinSuccess: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
     reminderId = options.reminderId
     console.log(reminderId)
     var loginSession = wx.getStorageSync('loginSession')
@@ -66,50 +67,68 @@ Page({
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
+  onReady: function() {
 
   },
-  
+
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+  onHide: function() {
 
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
+  onUnload: function() {
 
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
 
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
 
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
-
+  onShareAppMessage: function(options) {
+    var that = this
+    var shareObj = {
+      title: '快来加入此日程吧',
+      imageUrl: 'https://ssl.tzoo-img.com/images/tzoo.19489.0.773098.lakebaikal_shutterstock_783311422.jpg?width=548&spr=2',
+      success: function(res) {
+        // 转发成功之后的回调
+        if (res.errMsg == 'shareAppMessage:ok') {
+          console.log('转发成功')
+        }
+      },
+      fail: function() {
+        // 转发失败之后的回调
+        　　　　　　
+        if (res.errMsg == 'shareAppMessage:fail cancel') {　　　　　　　　 // 用户取消转发
+        } else if (res.errMsg == 'shareAppMessage:fail') {　　　　　　　　 // 转发失败，其中 detail message 为详细失败信息
+        }
+      },
+    }
+    return shareObj
   },
   timeSwitchChange: function(res) {
     timeSwitchState = res.detail.value
@@ -120,12 +139,12 @@ Page({
   },
   // 输入日程地点
   //日程地点输入
-  inputLocation: function (e) {
+  inputLocation: function(e) {
     rLocation = e.detail.value
     console.log(rLocation)
   },
-// 加入日程
-  orderSign: function (e) {
+  // 加入日程
+  orderSign: function(e) {
     var loginSession = wx.getStorageSync('loginSession')
     var that = this
     wx.request({
@@ -139,14 +158,57 @@ Page({
       },
       success: function(e) {
         console.log(e)
+        that.setData({
+          joinSuccess: true
+        })
         wx.showToast({
           title: '加入成功',
-          success: function () {
+          success: function() {
             wx.navigateBack({
-              
+
             })
           },
         })
+      }
+    })
+  },
+  // 删除日程
+  deleteReminder: function() {
+    var loginSession = wx.getStorageSync('loginSession')
+    var that = this
+    wx.showModal({
+      title: '提示',
+      content: '确定要删除此日程吗？',
+      success: function(e) {
+        if (e.confirm) {
+          //删除
+          wx.request({
+            url: app.globalData.API + '/reminder/' + reminderId,
+            method: 'DELETE',
+            header: {
+              loginSession: loginSession
+            },
+            success: function(e) {
+              if (e.statusCode >= 200 && e.statusCode < 300) {
+                wx.showModal({
+                  title: '提示',
+                  content: '删除成功！',
+                  confirmText: '确定',
+                  showCancel: false,
+                  success: function() {
+                    wx.navigateBack({
+
+                    })
+                  }
+                })
+              } else {
+                wx.showLoading({
+                  title: '删除失败！',
+                })
+              }
+            }
+          })
+        }
       }
     })
   }

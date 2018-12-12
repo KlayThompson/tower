@@ -5,14 +5,14 @@
     <text class='header_subTitle'>{{notifyCount}}</text>
   </view>
   <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 点击登录 </button>
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo" class='loginButton'> 点击登录 </button>
     <block wx:else>
       <!-- <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
       <text class="userinfo-nickname">{{userInfo.nickName}}</text> -->
     </block>
-    
+    <view wx:if="{{!hasUserInfo && canIUse}}" class='tip_text'>提示：此小程序需要用户授权登录才能进行使用</view>
   </view>
-  <view class='reminder_list_view'>
+  <view class='reminder_list_view' wx:if="{{hasUserInfo}}">
     <view class='reminder_cell' wx:for="{{reminderSummary}}" wx:key="index">
       <view class="station-device-info" bindtap='gotoDetail' data-reminderItem="{{item}}">
         <view class="reminder_title">{{item.title}}</view>
@@ -21,6 +21,6 @@
       <image src="{{arrow_icon_url}}" mode="scaleToFill" binderror="" bindload="" class="list-arrow-icon"></image>
     </view>
   </view>
- <view class='add_symbol' bindtap='showAddNotify'></view>
+ <view class='add_symbol' bindtap='showAddNotify' wx:if="{{hasUserInfo}}"></view>
 
 </view>
