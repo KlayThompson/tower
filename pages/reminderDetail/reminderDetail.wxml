@@ -1,5 +1,7 @@
 <!--pages/reminderDetail/reminderDetail.wxml-->
-
+<view class='share_view'>
+  <button class='share_button' open-type='share'>分享</button>
+</view>
 <form name='pushMsgFm' report-submit bindsubmit='orderSign'>
   <view class='add_container'>
     <view class='notify_title_container'>
@@ -41,7 +43,8 @@
       <input placeholder='请输入备注' class='title_input' bindinput='inputDesc' value="{{detail}}" disabled="{{!owner}}"></input>
     </view>
     <button form-type="submit" class='submit_button' disabled="{{!owner}}" wx:if="{{owner}}">保存</button>
-    <button class='submit_button' form-type="submit" wx:else="{{!joined}}" disabled='{{joinSuccess}}'>加入此日程提醒</button>
+    <button class='submit_button' form-type="submit" wx:elif="{{!joined}}" disabled='{{joinSuccess}}'>加入此日程提醒</button>
+    <button class='delete_button' bindtap='quitReminder' wx:elif="{{joined}}">退出此日程提醒</button>
     <button class='delete_button' wx:if="{{owner}}" bindtap='deleteReminder'>删除日程</button>
   </view>
 </form>

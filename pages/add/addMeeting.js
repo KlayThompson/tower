@@ -91,7 +91,7 @@ Page({
       if (timeInt == 1 || timeInt == 2) {
         timeInt = timeInt * 60
       }
-      date = date + timeInt*60*1000
+      date = date - timeInt*60*1000
     }
     var reminderTime1 = that.changeToDate(date)
     wx.request({
