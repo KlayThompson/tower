@@ -96,6 +96,16 @@
   margin-bottom: 20px;
 }
 
+.before_time_container_hidden {
+  width: 100%;
+  height: 0.1px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
 .picker_before {
   position: absolute;
   left: 340rpx; 
@@ -142,6 +152,16 @@
 
 .share_button {
   background-color: #48abff;
+  width: 650rpx;
+  margin: 0 auto;
+  position: relative;
+  top:50rpx;
+  color: #fff;
+  margin-bottom: 20rpx;
+}
+
+.back_home_button {
+  background-color: rgb(23, 194, 66);
   width: 650rpx;
   margin: 0 auto;
   position: relative;

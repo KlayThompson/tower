@@ -49,6 +49,12 @@ Page({
     if(rTitle == '') {
       that.showModelMsg('请输入日程标题')
       return
+    } else if (that.data.meetingDate == '') {
+      that.showModelMsg('请选择日程日期')
+      return
+    } else if (that.data.meetingTime == '') {
+      that.showModelMsg('请选择日程时间')
+      return
     }
     wx.request({
       url: app.globalData.BaseUrl + '/v1/wxapi/reminder',

@@ -31,7 +31,9 @@ Page({
     arrow_icon_url: '/resources/arrow-right.png',
     notifyInfo: [],
     userNum: '',
-    ownerUserid: ''
+    ownerUserid: '',
+    fired: false,  //是否过期  
+    enableEdit: false
   },
 
   /**
@@ -64,6 +66,16 @@ Page({
         } else if (min == 0) {
           before = '立刻'
         }
+        //能否编辑
+        if (e.data.owner && !e.data.fired) {
+          that.setData({
+            enableEdit: true
+          })
+        } else {
+          that.setData({
+            enableEdit: false
+          })
+        }
         that.setData({
           title: e.data.title,
           detail: e.data.detail,
@@ -80,7 +92,8 @@ Page({
           beforeTime: before,
           notifyUserInfo: e.data.notifyUserInfo,
           userNum: e.data.notifyUserInfo.length + 1 + '人',
-          ownerUserid: e.data.ownerUserid
+          ownerUserid: e.data.ownerUserid,
+          joinSuccess: e.data.fired
         })
       }
     })
@@ -147,6 +160,13 @@ Page({
     }
     return shareObj
   },
+  // 返回首页
+  backHomePage: function() {
+    wx.reLaunch({
+      url: '../index/index',
+    })
+  },
+  // 提醒时间开关事件
   timeSwitchChange: function(res) {
     timeSwitchState = res.detail.value
     console.log(timeSwitchState)
@@ -197,6 +217,18 @@ Page({
         }
       })
     } else { //保存
+      //先判断字段是否完整
+      if (that.data.title == '') {
+        that.showModelMsg('请输入日程标题')
+        return
+      } else if (that.data.happenTime == '') {
+        that.showModelMsg('请选择日程日期')
+        return
+      } else if (that.data.meetingTime == '') {
+        that.showModelMsg('请选择日程时间')
+        return
+      }
+
       //先删除，在添加
       wx.request({
         url: app.globalData.API + '/reminder/' + reminderId,
@@ -338,5 +370,16 @@ Page({
     minute = minute < 10 ? ('0' + minute) : minute;
     second = second < 10 ? ('0' + second) : second;
     return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+  },
+  // 提示信息
+  showModelMsg: function (msg) {
+    wx.showModal({
+      title: '提示',
+      content: msg,
+      confirmText: '确定',
+      showCancel: false,
+      success: function () {
+      }
+    })
   }
 })

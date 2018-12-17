@@ -2,17 +2,17 @@
 <form name='pushMsgFm' report-submit bindsubmit='orderSign'>
   <view class='add_container'>
     <view class='notify_title_container'>
-      <input placeholder='请输入会议标题' class='title_input' bindinput='inputTitle' value="{{title}}" disabled="{{!owner}}"></input>
+      <input placeholder='请输入会议标题' class='title_input' bindinput='inputTitle' value="{{title}}" disabled="{{!enableEdit}}"></input>
     </view>
     <view class='notify_switch_container'>
       <text class='subTitle'>在指定时间提醒我</text>
-      <switch checked='true' class='notify_switch' bindchange='timeSwitchChange' disabled="{{!owner}}"></switch>
+      <switch checked='true' class='notify_switch' bindchange='timeSwitchChange' disabled="{{!enableEdit}}"></switch>
     </view>
-    <view class='time_view' wx:if="{{needPush}}">
+    <view class='time_view'>
       <view class='meeting_date_container'>
         <text class='subTitle'>提醒日期</text>
-        <picker mode="date" class='select_time' wx:if="{{happenTime == ''}}" bindchange='selectDate' disabled="{{!owner}}">请选择提醒日期</picker>
-        <picker mode="date" disabled="{{!owner}}" bindchange='selectDate' class='select_time' wx:else>{{happenTime}}</picker>
+        <picker mode="date" class='select_time' wx:if="{{happenTime == ''}}" bindchange='selectDate' disabled="{{!enableEdit}}">请选择提醒日期</picker>
+        <picker mode="date" disabled="{{!enableEdit}}" bindchange='selectDate' class='select_time' wx:else>{{happenTime}}</picker>
         <image src="{{arrow_icon_url}}" mode="scaleToFill" binderror="" bindload="" class="list-arrow-icon"></image>
       </view>
       <view class='meeting_time_container' wx:if="{{happenTime != ''}}">
@@ -22,11 +22,12 @@
         <picker mode="time" class='select_time' bindchange='selectTime' wx:else>{{meetingTime}}</picker>
         <image src="{{arrow_icon_url}}" mode="scaleToFill" binderror="" bindload="" class="list-arrow-icon"></image>
       </view>
-      <view class='before_time_container'>
+      <view class='before_time_container' wx:if="{{needPush}}">
         <text class='subTitle'>提前多久提醒我</text>
-        <picker bindchange="bindBeforeChange" range="{{array}}" class='picker_before' disabled="{{!owner}}">{{beforeTime}}</picker>
+        <picker bindchange="bindBeforeChange" range="{{array}}" class='picker_before' disabled="{{!enableEdit}}">{{beforeTime}}</picker>
         <image src="{{arrow_icon_url}}" mode="scaleToFill" binderror="" bindload="" class="list-arrow-icon"></image>
       </view>
+      <view class='before_time_container_hidden' wx:else></view>
     </view>
 
     <!-- <view class='notify_switch_container'>
@@ -34,21 +35,22 @@
       <switch class='notify_switch' bindchange='locationSwitchChange' disabled="{{!owner}}"></switch>
     </view> -->
     <view class='notify_title_container'>
-      <input placeholder='请输入日程地点' class='title_input' bindinput='inputLocation' disabled="{{!owner}}" value='{{location}}'></input>
+      <input placeholder='请输入日程地点' class='title_input' bindinput='inputLocation' disabled="{{!enableEdit}}" value='{{location}}'></input>
     </view>
     <view class='notify_switch_container'>
-      <input placeholder='请输入备注' class='title_input' bindinput='inputDesc' value="{{detail}}" disabled="{{!owner}}"></input>
+      <input placeholder='请输入备注' class='title_input' bindinput='inputDesc' value="{{detail}}" disabled="{{!enableEdit}}"></input>
     </view>
     <view class='notify_switch_container' bindtap='seeNotifyUser'>
       <text class='subTitle'>参与人员</text>
       <text class='right_text'>{{userNum}}</text>
       <image src="{{arrow_icon_url}}" mode="scaleToFill" binderror="" bindload="" class="list-arrow-icon"></image>
     </view>
-    <button form-type="submit" class='submit_button' disabled="{{!owner}}" wx:if="{{owner}}">保存</button>
+    <button form-type="submit" class='submit_button' disabled="{{!enableEdit}}" wx:if="{{owner}}">保存</button>
     <button class='submit_button' form-type="submit" wx:elif="{{!joined}}" disabled='{{joinSuccess}}'>加入此日程提醒</button>
-    <button class='delete_button' bindtap='quitReminder' wx:elif="{{joined}}">退出此日程提醒</button>
-    <button class='delete_button' wx:if="{{owner}}" bindtap='deleteReminder'>删除日程</button>
-    <button class='share_button' open-type='share'>分享</button>
+    <button class='delete_button' disabled="{{fired}}" bindtap='quitReminder' wx:elif="{{joined}}">退出此日程提醒</button>
+    <button class='share_button' disabled="{{!enableEdit}}" open-type='share'>分享</button>
+    <button class='delete_button' wx:if="{{owner}}" disabled="{{!enableEdit}}" bindtap='deleteReminder'>删除日程</button>
+    <button class='back_home_button' bindtap='backHomePage'>返回首页</button>
 
   </view>
 </form>
