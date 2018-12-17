@@ -3,7 +3,8 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/add/addMeeting",
-    "pages/reminderDetail/reminderDetail"
+    "pages/reminderDetail/reminderDetail",
+    "pages/userList/userList"
   ],
   "window": {
     "backgroundTextStyle": "light",

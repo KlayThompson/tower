@@ -1,0 +1,9 @@
+<!--pages/userList/userList.wxml-->
+<view class='content'>
+  <view class='content-item' wx:for="{{userInfoArr}}" wx:key="index" data-userInfo='{{item}}'>
+    <image mode='scaleToFill' src='{{item.data.avatarUrl}}'></image>
+    <view class='content-item-text'>
+      <text>{{item.data.nickName}}</text>
+    </view>
+  </view>
+</view>

@@ -27,7 +27,11 @@ Page({
     beforeTime: '立刻',
     array: ['立刻', '5分钟', '10分钟', '30分钟', '1小时', '2小时'],
     joinSuccess: false,
-    joined: false
+    joined: false,
+    arrow_icon_url: '/resources/arrow-right.png',
+    notifyInfo: [],
+    userNum: '',
+    ownerUserid: ''
   },
 
   /**
@@ -50,6 +54,16 @@ Page({
         var str = e.data.happenTime + ''
         var date = str.substring(0,10)
         var time = str.substring(11,16)
+        var happenDate = new Date(e.data.happenTime.replace(/-/g, "/")).getTime()
+        var reminderDate = new Date(e.data.reminderTime1.replace(/-/g, "/")).getTime()
+        var min = (happenDate - reminderDate)/1000/60
+        var before = min + '分钟'
+        if (min >= 60) {
+          min = min/60
+          before = min + '小时'
+        } else if (min == 0) {
+          before = '立刻'
+        }
         that.setData({
           title: e.data.title,
           detail: e.data.detail,
@@ -62,9 +76,21 @@ Page({
           reminderTime1: e.data.reminderTime1,
           reminderTime2: e.data.reminderTime2,
           owner: e.data.owner,
-          joined: e.data.joined
+          joined: e.data.joined,
+          beforeTime: before,
+          notifyUserInfo: e.data.notifyUserInfo,
+          userNum: e.data.notifyUserInfo.length + 1 + '人',
+          ownerUserid: e.data.ownerUserid
         })
       }
+    })
+  },
+
+  seeNotifyUser: function() {
+    
+    var array = this.data.notifyUserInfo
+    wx.navigateTo({
+      url: '../userList/userList' + '?notifyUserInfo=' + JSON.stringify(array) + '&ownerId=' + this.data.ownerUserid,
     })
   },
 
@@ -173,7 +199,7 @@ Page({
     } else { //保存
       //先删除，在添加
       wx.request({
-        url: app.globalData.API + '/reminder/' + reminderId + '/notifyuser',
+        url: app.globalData.API + '/reminder/' + reminderId,
         method: 'DELETE',
         header: {
           loginSession: loginSession
@@ -197,7 +223,7 @@ Page({
         if (e.confirm) {
           //删除
           wx.request({
-            url: app.globalData.API + '/reminder/' + reminderId + '/notifyuser',
+            url: app.globalData.API + '/reminder/' + reminderId,
             method: 'DELETE',
             header: {
               loginSession: loginSession
