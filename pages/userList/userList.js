@@ -7,7 +7,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    userInfoArr: []
+    userInfoArr: [],
   },
 
   /**
@@ -34,6 +34,7 @@ Page({
         },
         success: function (res) {
           arr.push(res)
+          console.log(res)
           that.setData({
             userInfoArr: arr
           })
