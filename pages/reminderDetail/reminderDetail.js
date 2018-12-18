@@ -32,7 +32,7 @@ Page({
     notifyInfo: [],
     userNum: '',
     ownerUserid: '',
-    fired: false,  //是否过期  
+    fired: false, //是否过期  
     enableEdit: false
   },
 
@@ -54,14 +54,14 @@ Page({
         console.log(e)
         formId = e.data.ownerFormId
         var str = e.data.happenTime + ''
-        var date = str.substring(0,10)
-        var time = str.substring(11,16)
+        var date = str.substring(0, 10)
+        var time = str.substring(11, 16)
         var happenDate = new Date(e.data.happenTime.replace(/-/g, "/")).getTime()
         var reminderDate = new Date(e.data.reminderTime1.replace(/-/g, "/")).getTime()
-        var min = (happenDate - reminderDate)/1000/60
+        var min = (happenDate - reminderDate) / 1000 / 60
         var before = min + '分钟'
         if (min >= 60) {
-          min = min/60
+          min = min / 60
           before = min + '小时'
         } else if (min == 0) {
           before = '立刻'
@@ -100,7 +100,7 @@ Page({
   },
 
   seeNotifyUser: function() {
-    
+
     var array = this.data.notifyUserInfo
     wx.navigateTo({
       url: '../userList/userList' + '?notifyUserInfo=' + JSON.stringify(array) + '&ownerId=' + this.data.ownerUserid,
@@ -182,7 +182,7 @@ Page({
     })
   },
   //描述输入
-  inputDesc: function (e) {
+  inputDesc: function(e) {
     this.setData({
       detail: e.detail.value
     })
@@ -228,20 +228,45 @@ Page({
         that.showModelMsg('请选择日程时间')
         return
       }
-
-      //先删除，在添加
-      wx.request({
-        url: app.globalData.API + '/reminder/' + reminderId,
-        method: 'DELETE',
-        header: {
-          loginSession: loginSession
-        },
-        success: function(res) {
-          if (res.statusCode >= 200 && res.statusCode < 300) {
-            that.addReminder(e)
-          }
+      var time = this.data.happenTime + ' ' + this.data.meetingTime + ':00'
+      var date = new Date(time.replace(/-/g, "/")).getTime()
+      if (that.data.beforeTime != "立刻") {
+        var timeInt = parseInt(that.data.beforeTime)
+        if (timeInt == 1 || timeInt == 2) {
+          timeInt = timeInt * 60
         }
-      })
+        date = date - timeInt * 60 * 1000
+      }
+      var reminderTime1 = that.changeToDate(date)
+      //获取提醒时间距离现在多久
+      var timestamp = Date.parse(new Date())
+      timestamp = timestamp + 7 * 24 * 60 * 60 * 1000
+      if (timestamp < date) {
+        console.log('超出了时间限制')
+        wx.showModal({
+          title: '提示',
+          content: '由于微信限制，目前提醒时间最长不超过七天，是否继续保存',
+          cancelText: '留下修改',
+          confirmText: '继续保存',
+          success: function (res) {
+            if (res.confirm) {
+              //先删除，在添加
+              wx.request({
+                url: app.globalData.API + '/reminder/' + reminderId,
+                method: 'DELETE',
+                header: {
+                  loginSession: loginSession
+                },
+                success: function (res) {
+                  if (res.statusCode >= 200 && res.statusCode < 300) {
+                    that.addReminder(e)
+                  }
+                }
+              })
+            }
+          }
+        })
+      }
     }
   },
   // 删除日程
@@ -353,10 +378,10 @@ Page({
     })
   },
   /*
-  * 时间戳转换为yyyy-MM-dd hh:mm:ss 格式  formatDate()
-  * inputTime   时间戳
-  */
-  changeToDate: function (inputTime) {
+   * 时间戳转换为yyyy-MM-dd hh:mm:ss 格式  formatDate()
+   * inputTime   时间戳
+   */
+  changeToDate: function(inputTime) {
     var date = new Date(inputTime);
     var y = date.getFullYear();
     var m = date.getMonth() + 1;
@@ -372,14 +397,13 @@ Page({
     return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
   },
   // 提示信息
-  showModelMsg: function (msg) {
+  showModelMsg: function(msg) {
     wx.showModal({
       title: '提示',
       content: msg,
       confirmText: '确定',
       showCancel: false,
-      success: function () {
-      }
+      success: function() {}
     })
   }
 })

@@ -18,8 +18,8 @@ Page({
    */
   data: {
     arrow_icon_url: '/resources/arrow-right.png',
-    meetingDate: '',//会议日期
-    meetingTime: '',//会议时间
+    meetingDate: '', //会议日期
+    meetingTime: '', //会议时间
     beforeTime: '立刻',
     array: ['立刻', '5分钟', '10分钟', '30分钟', '1小时', '2小时'],
     timeStatus: true
@@ -28,25 +28,25 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
+  onLoad: function(options) {
 
   },
 
-  orderSign: function (e) {
+  orderSign: function(e) {
     console.log(e)
     var that = this
     var loginSession = wx.getStorageSync('loginSession')
     var time = this.data.meetingDate + ' ' + this.data.meetingTime + ':00'
     var date = new Date(time.replace(/-/g, "/")).getTime()
-    if(that.data.beforeTime != "立刻") {
+    if (that.data.beforeTime != "立刻") {
       var timeInt = parseInt(that.data.beforeTime)
       if (timeInt == 1 || timeInt == 2) {
         timeInt = timeInt * 60
       }
-      date = date - timeInt*60*1000
+      date = date - timeInt * 60 * 1000
     }
     var reminderTime1 = that.changeToDate(date)
-    if(rTitle == '') {
+    if (rTitle == '') {
       that.showModelMsg('请输入日程标题')
       return
     } else if (that.data.meetingDate == '') {
@@ -56,27 +56,43 @@ Page({
       that.showModelMsg('请选择日程时间')
       return
     }
-    wx.request({
-      url: app.globalData.BaseUrl + '/v1/wxapi/reminder',
-      method: 'POST',
-      header: {
-        loginSession: loginSession
-      },
-      data: {
-        title: rTitle,
-        location: location,
-        needPush: timeSwitchState,
-        needSms: false,
-        ownerFormId: e.detail.formId,
-        happenTime: time,
-        reminderTime1: reminderTime1,
-        detail: desc
-      },
-      success: function(res) {
-        console.log(res)
-        that.goToHomePage()
-      }
-    })
+    //获取提醒时间距离现在多久
+    var timestamp = Date.parse(new Date())
+    timestamp = timestamp + 7 * 24 * 60 * 60 * 1000
+    if (timestamp < date) {
+      console.log('超出了时间限制')
+      wx.showModal({
+        title: '提示',
+        content: '由于微信限制，目前提醒时间最长不超过七天，是否继续保存',
+        cancelText: '留下修改',
+        confirmText: '继续保存',
+        success: function(res) {
+          if (res.confirm) {
+            wx.request({
+              url: app.globalData.BaseUrl + '/v1/wxapi/reminder',
+              method: 'POST',
+              header: {
+                loginSession: loginSession
+              },
+              data: {
+                title: rTitle,
+                location: location,
+                needPush: timeSwitchState,
+                needSms: false,
+                ownerFormId: e.detail.formId,
+                happenTime: time,
+                reminderTime1: reminderTime1,
+                detail: desc
+              },
+              success: function(res) {
+                console.log(res)
+                that.goToHomePage()
+              }
+            })
+          }
+        }
+      })
+    }
   },
   //输入标题
   inputTitle: function(e) {
@@ -84,20 +100,20 @@ Page({
     console.log(rTitle)
   },
   //选择日期
-  selectDate: function (e) {
+  selectDate: function(e) {
     console.log(e)
     this.setData({
       meetingDate: e.detail.value
     })
   },
-//选择具体时间
-  selectTime: function (e) {
+  //选择具体时间
+  selectTime: function(e) {
     console.log(e)
     this.setData({
       meetingTime: e.detail.value
     })
   },
-//提前多久时间选择
+  //提前多久时间选择
   bindBeforeChange: function(e) {
     console.log(e)
     var time = this.data.array[e.detail.value]
@@ -115,7 +131,7 @@ Page({
     })
   },
   // 位置开关事件
-  locationSwitchChange: function (res) {
+  locationSwitchChange: function(res) {
     locationSwitchState = res.detail.value
     console.log(locationSwitchState)
     if (locationSwitchState) {
@@ -124,42 +140,42 @@ Page({
         success(res) {
           userLat = res.latitude
           userLng = res.longitude
-          console.log(userLat,userLng)
+          console.log(userLat, userLng)
         }
       })
     }
   },
   //描述输入
-  inputDesc: function (e) {
+  inputDesc: function(e) {
     desc = e.detail.value
     console.log(desc)
   },
   //日程地点输入
-  inputLocation: function (e) {
+  inputLocation: function(e) {
     location = e.detail.value
     console.log(location)
   },
 
-  goToHomePage: function () {
+  goToHomePage: function() {
 
     wx.showModal({
       title: '提示',
       content: '保存成功！',
       confirmText: '确定',
       showCancel: false,
-      success: function () {
+      success: function() {
         wx.navigateBack({
 
         })
       }
     })
   },
-  
+
   /*
    * 时间戳转换为yyyy-MM-dd hh:mm:ss 格式  formatDate()
    * inputTime   时间戳
    */
-  changeToDate: function (inputTime) {
+  changeToDate: function(inputTime) {
     var date = new Date(inputTime);
     var y = date.getFullYear();
     var m = date.getMonth() + 1;
@@ -180,8 +196,7 @@ Page({
       content: msg,
       confirmText: '确定',
       showCancel: false,
-      success: function () {
-      }
+      success: function() {}
     })
   }
 })
