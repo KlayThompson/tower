@@ -248,7 +248,7 @@ Page({
           content: '由于微信限制，目前提醒时间最长不超过七天，是否继续保存',
           cancelText: '留下修改',
           confirmText: '继续保存',
-          success: function (res) {
+          success: function(res) {
             if (res.confirm) {
               //先删除，在添加
               wx.request({
@@ -257,7 +257,7 @@ Page({
                 header: {
                   loginSession: loginSession
                 },
-                success: function (res) {
+                success: function(res) {
                   if (res.statusCode >= 200 && res.statusCode < 300) {
                     that.addReminder(e)
                   }
@@ -314,7 +314,7 @@ Page({
     var loginSession = wx.getStorageSync('loginSession')
     var that = this
     wx.request({
-      url: app.globalData.API + '/reminder/' + reminderId + 'notifyuser',
+      url: app.globalData.API + '/reminder/' + reminderId + '/notifyuser',
       method: 'DELETE',
       header: {
         loginSession: loginSession
@@ -327,13 +327,13 @@ Page({
             confirmText: '确定',
             showCancel: false,
             success: function() {
-              wx.navigateBack({
-
+              wx.reLaunch({
+                url: '../index/index',
               })
             }
           })
         } else {
-          wx.showLoading({
+          wx.showToast({
             title: '退出失败！',
           })
         }
@@ -369,7 +369,7 @@ Page({
         reminderTime1: reminderTime1,
         detail: that.data.detail
       },
-      success: function (res) {
+      success: function(res) {
         console.log(res)
         wx.reLaunch({
           url: '../index/index',

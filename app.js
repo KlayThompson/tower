@@ -17,7 +17,8 @@ App({
         var loginSession = wx.getStorageSync('loginSession')
         if (!loginSession) {
           wx.request({
-            url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/wxLogin',
+            // url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/wxLogin',//dev
+            url: 'https://dwxapi.anyocharging.com:12443/v1/wxapi/wxLogin',//pro
             data: {
               code: res.code,
               info: infoStr
@@ -55,7 +56,8 @@ App({
                 var nickName = res.userInfo.nickName + ''
 
                 wx.request({
-                  url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/user',
+                  // url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/user',//dev
+                  url: 'https://dwxapi.anyocharging.com:12443/v1/wxapi/user',//pro
                   method: 'PUT',
                   data: {
                     nickName: nickName,
@@ -80,7 +82,9 @@ App({
   },
   globalData: {
     userInfo: null,
-    BaseUrl: 'https://dwxapi.anyocharging.com:11443',
-    API: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/',
+    // BaseUrl: 'https://dwxapi.anyocharging.com:11443',//dev
+    BaseUrl: 'https://dwxapi.anyocharging.com:12443',//pro
+    // API: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/',//dev
+    API: 'https://dwxapi.anyocharging.com:12443/v1/wxapi/',//pro
   }
 })

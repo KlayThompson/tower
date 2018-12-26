@@ -67,6 +67,11 @@
   position: absolute;
   left: 220rpx; 
   color: #4c4c4c;
+  height: 45px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80%;
 }
 .list-arrow-icon {
   position: absolute;
@@ -110,6 +115,11 @@
   position: absolute;
   left: 340rpx; 
   color: #4c4c4c;
+  height: 45px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80%;
 }
 
 .submit_button {
@@ -128,9 +138,9 @@
   margin: 0 auto;
   position: relative;
   top:50rpx;
-  background-color: rgb(250, 108, 83);
+  background-color: #fff;
   /* background-color:#E99746; */
-  color: #fff;
+  color: rgb(250, 108, 83);
   margin-bottom: 20rpx;
 }
 
@@ -151,21 +161,21 @@
 }
 
 .share_button {
-  background-color: #48abff;
+  background-color: #fff;
   width: 650rpx;
   margin: 0 auto;
   position: relative;
   top:50rpx;
-  color: #fff;
+  color: #4c4c4c;
   margin-bottom: 20rpx;
 }
 
 .back_home_button {
-  background-color: rgb(23, 194, 66);
+  background-color: #fff;
   width: 650rpx;
   margin: 0 auto;
   position: relative;
   top:50rpx;
-  color: #fff;
+  color: #4c4c4c;
   margin-bottom: 20rpx;
 }

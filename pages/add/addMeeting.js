@@ -68,32 +68,41 @@ Page({
         confirmText: '继续保存',
         success: function(res) {
           if (res.confirm) {
-            wx.request({
-              url: app.globalData.BaseUrl + '/v1/wxapi/reminder',
-              method: 'POST',
-              header: {
-                loginSession: loginSession
-              },
-              data: {
-                title: rTitle,
-                location: location,
-                needPush: timeSwitchState,
-                needSms: false,
-                ownerFormId: e.detail.formId,
-                happenTime: time,
-                reminderTime1: reminderTime1,
-                detail: desc
-              },
-              success: function(res) {
-                console.log(res)
-                that.goToHomePage()
-              }
-            })
+            that.addReminderToServer(rTitle, location, timeSwitchState, false, e.detail.formId, time, reminderTime1, desc)
           }
         }
       })
+    } else {
+      that.addReminderToServer(rTitle, location, timeSwitchState, false, e.detail.formId, time, reminderTime1, desc)
     }
   },
+// 最后网络请求
+  addReminderToServer: function(title, location, needPush, needSms, formId, time, reminderTime, desc) {
+    var that = this
+    var loginSession = wx.getStorageSync('loginSession')
+    wx.request({
+      url: app.globalData.BaseUrl + '/v1/wxapi/reminder',
+      method: 'POST',
+      header: {
+        loginSession: loginSession
+      },
+      data: {
+        title: title,
+        location: location,
+        needPush: needPush,
+        needSms: needSms,
+        ownerFormId: formId,
+        happenTime: time,
+        reminderTime1: reminderTime,
+        detail: desc
+      },
+      success: function(res) {
+        console.log(res)
+        that.goToHomePage()
+      }
+    })
+  },
+
   //输入标题
   inputTitle: function(e) {
     rTitle = e.detail.value

@@ -48,7 +48,7 @@
     <button form-type="submit" class='submit_button' disabled="{{!enableEdit}}" wx:if="{{owner}}">保存</button>
     <button class='submit_button' form-type="submit" wx:elif="{{!joined}}" disabled='{{joinSuccess}}'>加入此日程提醒</button>
     <button class='delete_button' disabled="{{fired}}" bindtap='quitReminder' wx:elif="{{joined}}">退出此日程提醒</button>
-    <button class='share_button' disabled="{{!enableEdit}}" open-type='share'>分享</button>
+    <button class='share_button' disabled="{{fired}}" open-type='share'>分享</button>
     <button class='delete_button' wx:if="{{owner}}" disabled="{{!enableEdit}}" bindtap='deleteReminder'>删除日程</button>
     <button class='back_home_button' bindtap='backHomePage'>返回首页</button>
 

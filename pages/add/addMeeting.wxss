@@ -1,8 +1,9 @@
 /* pages/add/addMeeting.wxss */
+
 .add_container {
-  height:100%;
-  width:100%;
-  background-color:#f0f0f0;
+  height: 100%;
+  width: 100%;
+  background-color: #f0f0f0;
   padding: 80rpx 0;
 }
 
@@ -53,19 +54,25 @@
   background: #fff;
   display: flex;
   flex-direction: column;
-  justify-content: center; 
+  justify-content: center;
 }
 
 .select_time {
   position: absolute;
-  left: 220rpx; 
+  left: 220rpx;
   color: #4c4c4c;
+  height: 45px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80%;
 }
+
 .list-arrow-icon {
   position: absolute;
   right: 20rpx;
-  height:46rpx;
-  width:46rpx;
+  height: 46rpx;
+  width: 46rpx;
 }
 
 .meeting_time_container {
@@ -75,7 +82,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-top: 2rpx dashed #edeff1; 
+  border-top: 2rpx dashed #edeff1;
 }
 
 .before_time_container {
@@ -85,7 +92,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-top: 2rpx dashed #edeff1; 
+  border-top: 2rpx dashed #edeff1;
   margin-bottom: 20px;
 }
 
@@ -101,15 +108,20 @@
 
 .picker_before {
   position: absolute;
-  left: 340rpx; 
+  left: 340rpx;
   color: #4c4c4c;
+  height: 45px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80%;
 }
 
 .submit_button {
   width: 650rpx;
   margin: 0 auto;
   position: relative;
-  top:50rpx;
+  top: 50rpx;
   background-color: rgb(23, 194, 66);
   /* background-color:#E99746; */
   color: #fff;
