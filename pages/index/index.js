@@ -1,6 +1,8 @@
 //index.js
 //获取应用实例
 const app = getApp()
+var reminderId
+var tapCount = 0
 
 Page({
   data: {
@@ -8,23 +10,30 @@ Page({
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
-    notifyCount: 2,
+    notifyCount: 0,
     reminderSummary: [],
     arrow_icon_url: '/resources/arrow-right.png'
   },
 
-  onShow: function () {
-    this.loadReminderList()
+  onShow: function() {
+    if (app.globalData.userInfo) {
+      this.loadReminderList()
+    }
+    tapCount = 0
   },
-  onLoad: function () {
-    this.loadReminderList()
+  onHide: function () {
+    tapCount = 0
+  },
+  onLoad: function(options) {
+    reminderId = options.reminderId
 
     if (app.globalData.userInfo) {
       this.setData({
         userInfo: app.globalData.userInfo,
         hasUserInfo: true
       })
-    } else if (this.data.canIUse){
+      this.loadReminderList()
+    } else if (this.data.canIUse) {
       // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
       // 所以此处加入 callback 以防止这种情况
       app.userInfoReadyCallback = res => {
@@ -32,6 +41,7 @@ Page({
           userInfo: res.userInfo,
           hasUserInfo: true
         })
+        this.loadReminderList()
       }
     } else {
       // 在没有 open-type=getUserInfo 版本的兼容处理
@@ -48,12 +58,22 @@ Page({
   },
   getUserInfo: function(e) {
     console.log(e)
+    if (!e.detail.userInfo) {
+      wx.showToast({
+        title: '登录失败',
+        icon: 'none'
+      })
+      return;
+    }
     app.globalData.userInfo = e.detail.userInfo
+
     this.setData({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
     })
-  var that = this
+    var that = this
+    that.userLogin()
+
     //更新用户信息
     var loginSession = wx.getStorageSync('loginSession')
     if (loginSession) {
@@ -75,6 +95,11 @@ Page({
         },
         success: function (e) {
           that.loadReminderList()
+          if (reminderId) {
+            wx.navigateTo({
+              url: '../reminderDetail/reminderDetail' + '?reminderId=' + reminderId
+            })
+          }
         }
       })
     }
@@ -85,9 +110,9 @@ Page({
     })
   },
   gotoDetail: function(item) {
-    var reminderId = item.currentTarget.dataset.reminderitem.reminderid
+    var reminder_id = item.currentTarget.dataset.reminderitem.reminderid
     wx.navigateTo({
-      url: '../reminderDetail/reminderDetail' + '?reminderId=' + reminderId
+      url: '../reminderDetail/reminderDetail' + '?reminderId=' + reminder_id
     })
   },
 
@@ -101,7 +126,7 @@ Page({
           'loginSession': loginSession
         },
         method: 'GET',
-        success: function (e) {
+        success: function(e) {
           if (e.statusCode == 401) {
             that.userLogin()
           } else {
@@ -113,29 +138,72 @@ Page({
         }
       })
     } else {
-     
+
     }
   },
-  userLogin: function (){
-    var codeInfo = wx.getStorageSync('codeInfo')
-    var infoStr = '{errMsg:' + codeInfo.errMsg + ',code:' + codeInfo.code + '}';
+  userLogin: function() {
+
+    wx.login({
+      success: res => {
+        var infoStr = '{errMsg:' + res.errMsg + ',code:' + res.code + '}';
+        var that = this
+        wx.request({
+          url: app.globalData.API + '/wxLogin',
+          data: {
+            code: res.code,
+            info: infoStr
+          },
+          header: {
+            "Content-Type": "application/json"
+          },
+          method: 'POST',
+          success: function(e) {
+            console.log(e)
+            wx.setStorageSync('loginSession', e.data.loginSession)
+            //重新调取提醒列表
+            that.loadReminderList()
+            that.updateUser()
+          }
+        })
+      }
+    })
+  },
+  //跳转到切换url界面
+  goChangeUrl: function() {
+    if (tapCount == 10) {
+    wx.navigateTo({
+      url: '../changeUrl/changeUrl',
+    })
+    tapCount = 0;
+    }
+    tapCount++
+  },
+//更新用户信息
+  updateUser: function () {
     var that = this
+    //更新用户信息
+    var loginSession = wx.getStorageSync('loginSession')
+    if (loginSession) {
+      var avatar = app.globalData.userInfo.avatarUrl + ''
+      var nickName = app.globalData.userInfo.nickName + ''
+
       wx.request({
-        url: app.globalData.API + '/wxLogin',
+        url: app.globalData.API + '/user',
+        method: 'PUT',
         data: {
-          code: codeInfo.code,
-          info: infoStr
+          nickName: nickName,
+          avatarUrl: avatar,
+          phoneNumber: '',
+          purePhoneNumber: '',
+          countryCode: ''
         },
         header: {
-          "Content-Type": "application/json"
+          'loginSession': loginSession
         },
-        method: 'POST',
         success: function (e) {
-          console.log(e)
-          wx.setStorageSync('loginSession', e.data.loginSession)
-          //重新调取提醒列表
-          that.loadReminderList()
+          console.log('更新用户信息成功' + e)
         }
       })
     }
+  }
 })

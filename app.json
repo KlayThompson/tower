@@ -4,7 +4,8 @@
     "pages/logs/logs",
     "pages/add/addMeeting",
     "pages/reminderDetail/reminderDetail",
-    "pages/userList/userList"
+    "pages/userList/userList",
+    "pages/changeUrl/changeUrl"
   ],
   "window": {
     "backgroundTextStyle": "light",

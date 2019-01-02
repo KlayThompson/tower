@@ -40,7 +40,16 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+
     reminderId = options.reminderId
+
+    if (!app.globalData.userInfo) {
+      wx.reLaunch({
+        url: '../index/index' + '?reminderId=' + reminderId,
+      })
+      return;
+    }
+
     console.log(reminderId + '1212121212121212121s')
     var loginSession = wx.getStorageSync('loginSession')
     var that = this
@@ -299,8 +308,9 @@ Page({
                   }
                 })
               } else {
-                wx.showLoading({
+                wx.showToast({
                   title: '删除失败！',
+                  icon: 'none'
                 })
               }
             }
@@ -335,6 +345,7 @@ Page({
         } else {
           wx.showToast({
             title: '退出失败！',
+            icon: 'none'
           })
         }
       }

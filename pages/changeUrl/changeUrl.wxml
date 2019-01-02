@@ -1,0 +1,15 @@
+<!--pages/changeUrl/changeUrl.wxml-->
+
+<view class='container'>
+
+  <view class='sub-view-container'>
+    <button wx:if="{{isProduct}}" class='checkButton' bindtap='changeToProduction'>正式环境</button>
+    <button wx:else class='disableButton' bindtap='changeToProduction'>正式环境</button>
+  </view>
+  <view class='sub-view-container'>
+    
+    <button wx:if="{{isProduct}}" class='disableButton' bindtap='changeToDevelope'>测试环境</button>
+        <button wx:else class='checkButton' bindtap='changeToDevelope'>测试环境</button>
+
+  </view>
+</view>

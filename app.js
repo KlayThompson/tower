@@ -16,9 +16,12 @@ App({
         var infoStr = '{errMsg:' + res.errMsg + ',code:' + res.code + '}';
         var loginSession = wx.getStorageSync('loginSession')
         if (!loginSession) {
+          var requestUrl = wx.getStorageSync('API_TOWER')
+          if (!requestUrl) {
+            requestUrl = 'https://dwxapi.anyocharging.com:12443/v1/wxapi/'
+          }
           wx.request({
-            // url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/wxLogin',//dev
-            url: 'https://dwxapi.anyocharging.com:12443/v1/wxapi/wxLogin',//pro
+            url: requestUrl + 'wxLogin',
             data: {
               code: res.code,
               info: infoStr
@@ -54,10 +57,12 @@ App({
               if (loginSession) {
                 var avatar = res.userInfo.avatarUrl + ''
                 var nickName = res.userInfo.nickName + ''
-
+                var requestUrl = wx.getStorageSync('API_TOWER')
+                if (!requestUrl) {
+                  requestUrl = 'https://dwxapi.anyocharging.com:12443/v1/wxapi/'
+                }
                 wx.request({
-                  // url: 'https://dwxapi.anyocharging.com:11443/v1/wxapi/user',//dev
-                  url: 'https://dwxapi.anyocharging.com:12443/v1/wxapi/user',//pro
+                  url: requestUrl + 'user',
                   method: 'PUT',
                   data: {
                     nickName: nickName,

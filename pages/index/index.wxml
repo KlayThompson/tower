@@ -1,7 +1,7 @@
 <!--index.wxml-->
 <view class="index_block_view">
  <view class='view_header' wx:if="{{hasUserInfo}}">
-    <text class='header_title'>提醒</text>
+    <text bindtap='goChangeUrl' class='header_title'>提醒</text>
     <text class='header_subTitle'>{{notifyCount}}</text>
   </view>
   <view class="userinfo">
