@@ -21,7 +21,7 @@ Page({
     meetingDate: '', //会议日期
     meetingTime: '', //会议时间
     beforeTime: '立刻',
-    array: ['立刻', '5分钟', '10分钟', '30分钟', '1小时', '2小时'],
+    array: ['立刻', '5分钟', '10分钟', '30分钟', '1小时', '2小时', '24小时'],
     timeStatus: true
   },
 
@@ -40,7 +40,7 @@ Page({
     var date = new Date(time.replace(/-/g, "/")).getTime()
     if (that.data.beforeTime != "立刻") {
       var timeInt = parseInt(that.data.beforeTime)
-      if (timeInt == 1 || timeInt == 2) {
+      if (timeInt == 1 || timeInt == 2 || timeInt== 24) {
         timeInt = timeInt * 60
       }
       date = date - timeInt * 60 * 1000

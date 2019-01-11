@@ -25,7 +25,7 @@ Page({
     reminderTime1: '',
     reminderTime2: '',
     beforeTime: '立刻',
-    array: ['立刻', '5分钟', '10分钟', '30分钟', '1小时', '2小时'],
+    array: ['立刻', '5分钟', '10分钟', '30分钟', '1小时', '2小时', '24小时'],
     joinSuccess: false,
     joined: false,
     arrow_icon_url: '/resources/arrow-right.png',
@@ -241,7 +241,7 @@ Page({
       var date = new Date(time.replace(/-/g, "/")).getTime()
       if (that.data.beforeTime != "立刻") {
         var timeInt = parseInt(that.data.beforeTime)
-        if (timeInt == 1 || timeInt == 2) {
+        if (timeInt == 1 || timeInt == 2 || timeInt == 24) {
           timeInt = timeInt * 60
         }
         date = date - timeInt * 60 * 1000
@@ -272,6 +272,20 @@ Page({
                   }
                 }
               })
+            }
+          }
+        })
+      } else {
+        //先删除，在添加
+        wx.request({
+          url: app.globalData.API + '/reminder/' + reminderId,
+          method: 'DELETE',
+          header: {
+            loginSession: loginSession
+          },
+          success: function (res) {
+            if (res.statusCode >= 200 && res.statusCode < 300) {
+              that.addReminder(e)
             }
           }
         })
