@@ -33,7 +33,8 @@ Page({
     userNum: '',
     ownerUserid: '',
     fired: false, //是否过期  
-    enableEdit: false
+    enableEdit: false,
+    orginalHappenTime: ''
   },
 
   /**
@@ -102,7 +103,8 @@ Page({
           notifyUserInfo: e.data.notifyUserInfo,
           userNum: e.data.notifyUserInfo.length + 1 + '人',
           ownerUserid: e.data.ownerUserid,
-          joinSuccess: e.data.fired
+          joinSuccess: e.data.fired,
+          orginalHappenTime: e.data.happenTime,
         })
       }
     })
@@ -238,6 +240,10 @@ Page({
         return
       }
       var time = this.data.happenTime + ' ' + this.data.meetingTime + ':00'
+      //判断是否编辑了日程时间
+      if (that.data.orginalHappenTime == time) {
+        that.editReminder(e)
+      } else {
       var date = new Date(time.replace(/-/g, "/")).getTime()
       if (that.data.beforeTime != "立刻") {
         var timeInt = parseInt(that.data.beforeTime)
@@ -290,8 +296,47 @@ Page({
           }
         })
       }
+      }
     }
   },
+  //编辑日程
+  editReminder: function(e) {
+    var loginSession = wx.getStorageSync('loginSession')
+    var that = this
+    var time = this.data.happenTime + ' ' + this.data.meetingTime + ':00'
+    var date = new Date(time.replace(/-/g, "/")).getTime()
+    if (that.data.beforeTime != "立刻") {
+      var timeInt = parseInt(that.data.beforeTime)
+      if (timeInt == 1 || timeInt == 2) {
+        timeInt = timeInt * 60
+      }
+      date = date - timeInt * 60 * 1000
+    }
+    var reminderTime1 = that.changeToDate(date)
+    wx.request({
+      url: app.globalData.API + '/reminder/' + reminderId,
+      method: 'PUT',
+      header: {
+        loginSession: loginSession
+      },
+      data: {
+        title: that.data.title,
+        location: that.data.location,
+        needPush: timeSwitchState,
+        needSms: false,
+        ownerFormId: e.detail.formId,
+        reminderTime1: reminderTime1,
+        detail: that.data.detail
+      },
+      success: function (res) {
+        console.log(res)
+        wx.reLaunch({
+          url: '../index/index',
+        })
+      }
+    })
+  },
+
   // 删除日程
   deleteReminder: function() {
     var loginSession = wx.getStorageSync('loginSession')
